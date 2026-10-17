@@ -127,7 +127,7 @@ export default function App() {
     <div className={`app${sideOpen ? '' : ' side-closed'}`}>
       <div className="classification" role="note">UNCLASSIFIED // EXERCISE // SIMULATED DATA</div>
       <header>
-        <h1 className="brand"><span className="brand-mark">Divergent</span></h1>
+        <h1 className="brand"><Logo className="brand-logo" /><span className="brand-mark">Divergent</span></h1>
         <label className="scenario">
           <span className="micro">Scenario</span>
           <select value={sid} onChange={(e) => setSid(e.target.value)}>

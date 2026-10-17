@@ -45,7 +45,8 @@ button:disabled { cursor: not-allowed; opacity: 0.4; }
 
 /* Header: wordmark, scenario, source, live telemetry */
 header { display: flex; align-items: stretch; gap: 16px; padding: 8px 16px; background: var(--panel); border-bottom: 1px solid var(--line); min-width: 0; flex-wrap: wrap; }
-.brand { display: flex; flex-direction: column; justify-content: center; margin: 0; padding-right: 16px; border-right: 1px solid var(--line); }
+.brand { display: flex; flex-direction: row; align-items: center; gap: 10px; justify-content: center; margin: 0; padding-right: 16px; border-right: 1px solid var(--line); }
+.brand-logo { width: 34px; height: 34px; color: var(--text); flex: none; }
 .brand-mark { font: 800 24px/1 var(--display); letter-spacing: 0.04em; color: var(--hazard); text-transform: uppercase; }
 .brand-sub { font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
 .scenario { display: flex; flex-direction: column; justify-content: center; gap: 2px; }
