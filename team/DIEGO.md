@@ -51,4 +51,4 @@ Folders: `sim/`, `api/`. Branch: `diego/*`. Start task 1 now.
   detections, rebuild, and set `Frame.recon` per t. `POST /recon/abort` `{route_id, t}` → `fly(..., abort_t=t)` and rebuild.
   Paths are under `/scenario/{id}/`.
 
-- [ ] **10. 3:30 freeze.** Final deploy, then confirm every endpoint on the Freestyle URL.
+- [x] **10. 3:30 freeze.** Final deploy, then confirm every endpoint on the Freestyle URL.
