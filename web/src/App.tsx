@@ -3,6 +3,7 @@ import { apiUrl, dataSource, listScenarios, loadScenario, whatIf, type Source } 
 import { pad3 } from './drones';
 import MapView, { ALL_LAYERS, frameAt, type Layers } from './MapView';
 import { alertKey, AlertsTab, alertsUpTo, LayersTab, MetricsTab, SurveyTab } from './panels';
+import Logo from './Logo';
 import Timeline from './Timeline';
 import type { ReconRoute, Scenario, ScenarioListItem, WhatIfRequest } from './types';
 
