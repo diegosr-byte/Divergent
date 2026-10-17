@@ -7,7 +7,7 @@ Dual-use: airport drone safety, wildfire response. **All data is simulated.** Su
 
 - **Live demo:** https://divergent.style.dev (backup: https://divergent-tau.vercel.app)
 - **API:** https://divergent-api.style.dev (`/scenarios`, `/scenario/{id}`)
-- **Launch video:** made with Latted — [link to be added]
+- **Launch video:** https://youtu.be/zYiZJmwicIA (made with Latted)
 
 ## The problem
 Drone defense starts with bad data. Radar, acoustic and RF sensors disagree, clutter looks like drones, and each sensor only sees part of the sky. Operators get dots, not answers. The questions that matter are different: *where did it come from, who is behind it, and what is it about to threaten?*
