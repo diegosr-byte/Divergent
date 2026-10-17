@@ -8,7 +8,8 @@ import { BOX_CORNERS } from './geo3d';
 const IDS = ['heat-a', 'heat-b'] as const;
 type HeatId = (typeof IDS)[number];
 const TILE = 256;
-const KEEP_FRAMES = 3; // canvases kept for tiles still loading at other zooms
+// Canvases are kept while a source shows them (or one is queued): the camera follows the drones, so the visible source
+// keeps asking for new tiles of its frame. Dropping it by age left those tiles blank (and cached) while playing.
 
 const frames = new Map<number, HTMLCanvasElement>();
 let protocolAdded = false;
@@ -44,7 +45,11 @@ async function renderTile(url: string): Promise<ArrayBuffer> {
   return blob ? blob.arrayBuffer() : new ArrayBuffer(0);
 }
 
-type State = { active: HeatId; pending: { id: HeatId; opacity: number } | null; version: number; key: string; opacity: number };
+type State = {
+  active: HeatId; pending: { id: HeatId; opacity: number } | null; version: number; key: string; opacity: number;
+  shows: Record<HeatId, number>; // frame version each source's tiles are cut from
+  queued: { version: number; opacity: number } | null; // newest frame that arrived while another was loading
+};
 const states = new WeakMap<MLMap, State>();
 const other = (id: HeatId): HeatId => (id === IDS[0] ? IDS[1] : IDS[0]);
 
@@ -58,7 +63,7 @@ export function addHeatLayers(map: MLMap) {
     map.addSource(id, { type: 'raster', tiles: [`heat://0/{z}/{x}/{y}`], tileSize: TILE, bounds: [west, south, east, north], maxzoom: 15 });
     map.addLayer({ id, type: 'raster', source: id, paint: { 'raster-opacity': 0, 'raster-resampling': 'linear', 'raster-fade-duration': 0 } });
   }
-  const st: State = { active: IDS[0], pending: null, version: 0, key: '', opacity: 0 };
+  const st: State = { active: IDS[0], pending: null, version: 0, key: '', opacity: 0, shows: { 'heat-a': 0, 'heat-b': 0 }, queued: null };
   states.set(map, st);
   map.on('sourcedata', (e: MapSourceDataEvent) => {
     const p = st.pending;
@@ -67,7 +72,23 @@ export function addHeatLayers(map: MLMap) {
     map.setPaintProperty(other(p.id), 'raster-opacity', 0);
     st.active = p.id;
     st.pending = null;
+    if (st.queued) {
+      const q = st.queued;
+      st.queued = null;
+      load(map, st, q.version, q.opacity);
+    }
   });
+}
+
+// Cut the hidden source's tiles from frame `version`; it swaps in once loaded.
+function load(map: MLMap, st: State, version: number, opacity: number) {
+  const next = other(st.active);
+  st.pending = { id: next, opacity };
+  st.shows[next] = version;
+  const inUse = new Set(Object.values(st.shows));
+  if (st.queued) inUse.add(st.queued.version);
+  for (const v of frames.keys()) if (!inUse.has(v)) frames.delete(v);
+  (map.getSource(next) as RasterTileSource).setTiles([`heat://${version}/{z}/{x}/{y}`]);
 }
 
 // Show `canvas` (or nothing) as the draped heat. `key` identifies the canvas contents; unchanged keys only restyle.
@@ -77,11 +98,13 @@ export function setHeat(map: MLMap, canvas: HTMLCanvasElement | null, key: strin
   if (!canvas) {
     st.key = '';
     st.pending = null;
+    st.queued = null;
     for (const id of IDS) map.setPaintProperty(id, 'raster-opacity', 0);
     return;
   }
   if (key === st.key) {
     st.opacity = opacity;
+    if (st.queued) st.queued.opacity = opacity;
     if (st.pending) st.pending.opacity = opacity;
     else map.setPaintProperty(st.active, 'raster-opacity', opacity);
     return;
@@ -90,8 +113,12 @@ export function setHeat(map: MLMap, canvas: HTMLCanvasElement | null, key: strin
   st.opacity = opacity;
   st.version += 1;
   frames.set(st.version, canvas);
-  for (const v of frames.keys()) if (v <= st.version - KEEP_FRAMES) frames.delete(v);
-  const next = st.pending ? st.pending.id : other(st.active);
-  st.pending = { id: next, opacity };
-  (map.getSource(next) as RasterTileSource).setTiles([`heat://${st.version}/{z}/{x}/{y}`]);
+  // While a frame is still loading, don't retarget it (on a slow machine it would never finish and the old heat
+  // would stay up): let it land, then load only the newest frame that came in meanwhile.
+  if (st.pending) {
+    if (st.queued) frames.delete(st.queued.version);
+    st.queued = { version: st.version, opacity };
+    return;
+  }
+  load(map, st, st.version, opacity);
 }
