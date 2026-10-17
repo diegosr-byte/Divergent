@@ -50,7 +50,6 @@ sensor suggestion → launch-team "moved" alerts → what-if side-by-side → fo
 - **Transpose / EF**: startup framing — customer, wedge, why now.
 - **Enactus**: dual-use — airport drone safety, wildfire response.
 - **Gutgutgoose** (remote): plain-language pitch; video stands alone.
-- Not using Superset; don't claim we did.
 
 ## Demo script (90 s)
 1. Problem: messy sensor data — where did that drone come from, and are *we* exposed? Army Fall 2026 RFS.

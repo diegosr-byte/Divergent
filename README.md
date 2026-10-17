@@ -40,7 +40,7 @@ Each stage is a pure function on plain dicts; `api/pipeline.py` is the only glue
 | `web/` | Neil | Operator map: 3D terrain, timeline, alerts, survey and what-if controls |
 
 ## Built with
-Python, FastAPI, NumPy, filterpy, pytest · React, Vite, TypeScript, MapLibre, deck.gl · **Freestyle** (the API and web app run on a Freestyle VM, and the what-if flow clones a second VM from a snapshot) · Vercel (backup web host) · **Superset** · **Latted** (launch video) · Claude Code and Codex (AI coding agents we built with) · Claude (optional explain layer).
+Python, FastAPI, NumPy, filterpy, pytest · React, Vite, TypeScript, MapLibre, deck.gl · **Freestyle** (the API and web app run on a Freestyle VM, and the what-if flow clones a second VM from a snapshot) · Vercel (backup web host) · **Superset** · **Latted** (launch video) · OpenAI's Codex and Claude Code (AI coding agents we built with) · Claude (optional explain layer).
 
 ## Run it locally
 ```bash
