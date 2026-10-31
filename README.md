@@ -5,7 +5,7 @@
 Built at c0mpiled-14 (UC Berkeley) for the YC Fall 2026 RFS, *The Future of American Defense*.
 Dual-use: airport drone safety, wildfire response. **All data is simulated.** Surveillance and decision support only: no weapons, targeting, or engagement.
 
-- **Live demo: offline.** It ran on Freestyle during the hackathon and has been shut down to save resources. Watch the launch video below, or run it locally (see "Run it locally").
+- **Live demo:** https://divergent.style.dev (API: https://divergent-api.style.dev). Give it about 10 seconds to load the scenario, then press Play.
 - **Launch video:** https://youtu.be/zYiZJmwicIA (made with Latted)
 
 ## The problem
